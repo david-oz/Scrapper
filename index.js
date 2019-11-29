@@ -25,8 +25,9 @@ const programs = [
 
 let isNewProgramExist = async (prog) => {
     logger.info(`starting analysis for ${prog.name}`);
+    let browser;
     try {
-        const browser = await puppeteer.launch(options);
+        browser = await puppeteer.launch(options);
         const page = await browser.newPage();
         await page.goto(prog.url);
         let results = await page.$x(prog.xPath);
@@ -37,10 +38,10 @@ let isNewProgramExist = async (prog) => {
             return false;
         }
     } catch (ex) {
-        logger.info(ex);
-        return null;
+        logger.info(ex.message);
     } finally {
         await browser.close();
+        return null;
     }
 };
 

@@ -29,7 +29,7 @@ let isNewProgramExist = async (prog) => {
     try {
         browser = await puppeteer.launch(options);
         const page = await browser.newPage();
-        await page.goto(prog.url);
+        await page.goto(prog.url, {waitUntil: 'load', timeout: 0});
         let results = await page.$x(prog.xPath);
         if (results && results.length > 0) {
             logger.info(`${prog.name} is available, sending mail...`);

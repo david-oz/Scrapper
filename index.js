@@ -1,5 +1,17 @@
 const puppeteer = require('puppeteer-core');
 const nodemailer = require('nodemailer');
+const { transports, createLogger, format } = require('winston');
+
+const logger = createLogger({
+    format: format.combine(
+        format.timestamp(),
+        format.json()
+    ),
+    transports: [
+        new transports.Console(),
+        new transports.File({ filename: './activity.log', level: 'info' }),
+    ]
+});
 
 const options = { executablePath: "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe" };
 const keshetUrl = 'https://www.mako.co.il/tv-joinus';
@@ -23,7 +35,7 @@ let isNewProgramExist = async (prog) => {
             return false;
         }
     } catch (ex) {
-        console.log(ex);
+        logger.info(ex);
         return null;
     } finally {
         await browser.close();
@@ -52,9 +64,9 @@ let sendMail = async (progName) => {
 
     transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
-            console.log(error);
+            logger.info(error);
         } else {
-            console.log('Email sent: ' + info.response);
+            logger.info('Email sent: ' + info.response)
         }
     });
 };
@@ -72,12 +84,5 @@ let run = async () => {
 // run();
 // sendMail('לעוף על המיליון');
 
-const winston = require('winston');
-let logger = new(winston.Logger)({
-    transports: [
-        new(winston.transports.Console)(),
-        new(winston.transports.File)({filename: './file'})
-    ]
-});
 
-logger.log('info', 'data');
+

@@ -81,7 +81,7 @@ let run = async () => {
         }
     }
 };
-// run();
+run();
 // sendMail('לעוף על המיליון');
 
 

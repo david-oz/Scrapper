@@ -24,12 +24,14 @@ const programs = [
 ]
 
 let isNewProgramExist = async (prog) => {
+    logger.info(`starting analysis for ${prog.name}`);
     try {
         const browser = await puppeteer.launch(options);
         const page = await browser.newPage();
         await page.goto(prog.url);
         let results = await page.$x(prog.xPath);
         if (results && results.length > 0) {
+            logger.info(`${prog.name} is available, sending mail...`);
             return true;
         } else {
             return false;
@@ -70,8 +72,6 @@ let sendMail = async (progName) => {
         }
     });
 };
-
-
 
 let run = async () => {
     for (let prog of programs) {

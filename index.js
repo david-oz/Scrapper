@@ -35,6 +35,7 @@ let isNewProgramExist = async (prog) => {
             logger.info(`${prog.name} is available, sending mail...`);
             return true;
         } else {
+            logger.info(`${prog.name} was not found`);
             return false;
         }
     } catch (ex) {
